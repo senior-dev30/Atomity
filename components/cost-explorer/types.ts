@@ -9,3 +9,5 @@ export interface DrillState {
 }
 
 export type Resource = "cpu" | "ram" | "storage" | "network" | "gpu";
+
+export type AnyNode = Cluster | Namespace | Pod;
