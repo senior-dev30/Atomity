@@ -23,6 +23,7 @@ const CostExplorer = () => {
   const [hovRes, setHovRes] = useState<Resource | null>(null);
 
   const items = getItems(drill, clusters);
+  const maxTot = Math.max(...items.map(total));
   const key = stateKey(drill);
   const isLeaf = drill.level === "pod";
 
@@ -60,7 +61,14 @@ const CostExplorer = () => {
             </div>
           </header>
           <section aria-label="Cost chart" className="px-6 pt-4 pb-2">
-            <BarChart />
+            <BarChart
+              stateKey={key}
+              items={items}
+              hovRes={hovRes}
+              hovered={hovered}
+              isLeaf={isLeaf}
+              maxTotal={maxTot}
+            />
           </section>
           <section aria-label="Cost breakdown table" className="px-6 pb-6">
             <DataTable
