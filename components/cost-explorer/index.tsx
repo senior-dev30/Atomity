@@ -8,6 +8,7 @@ import { DataTable } from "./DataTable";
 import { BarChart } from "./BarChart";
 import { effToken, fmt } from "@/utils/constants";
 import { ThemeToggle } from "./ThemeToggle";
+import { useClusterData } from "@/hooks/useClusterData";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -18,7 +19,8 @@ const getItems = (s: DrillState, clusterList: any[]): any[] => {
 const stateKey = (s: DrillState) => s.level + (s.cluster?.id ?? "") + (s.namespace?.id ?? "");
 
 const CostExplorer = () => {
-  const clusters = staticClusters;
+  const { data: apiClusters, isLoading, isError } = useClusterData();
+  const clusters = isError || !apiClusters ? staticClusters : apiClusters;
 
   const [drill, setDrill] = useState<DrillState>({ level: "cluster" });
   const [hovered, setHovered] = useState<string | null>(null);
