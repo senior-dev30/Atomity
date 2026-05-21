@@ -24,8 +24,9 @@ export const ThemeToggle = () => {
     <motion.button
       onClick={toggle}
       aria-label={`Switch to ${isDark ? "light" : "dark"} mode`}
-      whileHover={{ scale: 1.08 }}
-      whileTap={{ scale: 0.92 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.88 }}
+      transition={{ type: "spring", stiffness: 400, damping: 17 }}
       className="flex h-8 w-8 items-center justify-center rounded-full text-base transition-colors"
       style={{
         background: tokens.colors.bgMuted,

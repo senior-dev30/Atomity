@@ -52,8 +52,8 @@ export const DataTable = ({ items, isLeaf, hovered, hovRes, stateKey, onHover, o
             key={stateKey + "-tbody"}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: reduced ? 0 : 0.18 }}
+            exit={{ opacity: 0, transition: { duration: reduced ? 0 : 0.1, ease: "easeIn" } }}
+            transition={{ duration: reduced ? 0 : 0.15 }}
           >
             {items.map((item, idx) => {
               const tot = total(item);
@@ -65,9 +65,13 @@ export const DataTable = ({ items, isLeaf, hovered, hovRes, stateKey, onHover, o
                   key={item.id}
                   className={!isLeaf ? "cursor-pointer" : ""}
                   style={{ background: isHov ? "var(--color-bg-secondary)" : undefined }}
-                  initial={{ opacity: 0, y: reduced ? 0 : 4 }}
+                  initial={{ opacity: 0, y: reduced ? 0 : 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: reduced ? 0 : idx * 0.04 }}
+                  transition={{
+                    delay: reduced ? 0 : Math.min(idx, 7) * 0.045,
+                    duration: 0.38,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   onMouseEnter={() => onHover(item.id)}
                   onMouseLeave={() => onHover(null)}
                   onClick={() => !isLeaf && onSelect(item)}

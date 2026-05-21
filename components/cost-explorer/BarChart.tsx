@@ -28,8 +28,13 @@ export const BarChart = ({
 
   const wrapVariants = {
     hidden: { opacity: 0 },
-    show: { opacity: 1, transition: reduced ? { duration: 0 } : { staggerChildren: 0.07 } },
-    exit: { opacity: 0, transition: { duration: reduced ? 0 : 0.12 } },
+    show: {
+      opacity: 1,
+      transition: reduced
+        ? { duration: 0 }
+        : { staggerChildren: 0.055, delayChildren: 0.04 },
+    },
+    exit: { opacity: 0, transition: { duration: reduced ? 0 : 0.12, ease: "easeIn" as const } },
   };
 
   const barVariants = {
@@ -39,9 +44,13 @@ export const BarChart = ({
       scaleY: 1,
       transition: reduced
         ? { duration: 0 }
-        : { type: "spring" as const, bounce: 0.28, duration: 0.5 },
+        : { type: "spring" as const, stiffness: 300, damping: 22, restDelta: 0.001 },
     },
-    exit: { opacity: 0, scaleY: 0, transition: { duration: reduced ? 0 : 0.12 } },
+    exit: {
+      opacity: 0,
+      scaleY: 0.85,
+      transition: { duration: reduced ? 0 : 0.1, ease: "easeIn" as const },
+    },
   };
 
   return (
@@ -95,14 +104,14 @@ export const BarChart = ({
                   }`}
                   style={{ height: bh }}
                   animate={{
-                    scale: isHov && !isLeaf ? 1.04 : 1,
+                    scale: isHov && !isLeaf ? 1.035 : 1,
                     filter:
                       isHov && !isLeaf
-                        ? "brightness(1.1) drop-shadow(0 6px 18px rgba(0,0,0,0.18))"
-                        : "brightness(1)",
+                        ? "brightness(1.08) drop-shadow(0 8px 24px rgba(0,0,0,0.22))"
+                        : "brightness(1) drop-shadow(0 0px 0px rgba(0,0,0,0))",
                   }}
                   transition={
-                    reduced ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 26 }
+                    reduced ? { duration: 0 } : { type: "spring", stiffness: 440, damping: 30 }
                   }
                   onClick={() => !isLeaf && onSelect(item)}
                   onKeyDown={(e) =>
@@ -122,24 +131,28 @@ export const BarChart = ({
                           backgroundColor: RES[res].color,
                           flexShrink: 0,
                         }}
-                        animate={{ opacity: hovRes && hovRes !== res ? 0.1 : 1 }}
-                        transition={reduced ? { duration: 0 } : { duration: 0.18 }}
+                        animate={{ opacity: hovRes && hovRes !== res ? 0.07 : 1 }}
+                        transition={
+                          reduced ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 28 }
+                        }
                       />
                     );
                   })}
                   <motion.div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 bg-white"
-                    animate={{ opacity: isHov && !isLeaf ? 0.1 : 0 }}
-                    transition={reduced ? { duration: 0 } : undefined}
+                    animate={{ opacity: isHov && !isLeaf ? 0.08 : 0 }}
+                    transition={
+                      reduced ? { duration: 0 } : { type: "spring", stiffness: 300, damping: 28 }
+                    }
                   />
                   {item.efficiency < 25 && !reduced && (
                     <motion.div
                       aria-hidden="true"
                       className="pointer-events-none absolute inset-x-0 top-0 h-1"
                       style={{ backgroundColor: color }}
-                      animate={{ opacity: [0.35, 1, 0.35] }}
-                      transition={{ duration: 1.6, repeat: Infinity }}
+                      animate={{ opacity: [0.15, 0.9, 0.15] }}
+                      transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
                     />
                   )}
                 </motion.div>

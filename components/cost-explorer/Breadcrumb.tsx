@@ -25,7 +25,7 @@ const ActivePill = ({ label, level }: { label: string; level: Level }) => {
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.18 }}
+          transition={{ type: "spring", stiffness: 350, damping: 28 }}
           className="hidden sm:block rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-sm"
           style={{
             background: "var(--color-bg-primary)",
@@ -66,7 +66,8 @@ export const Breadcrumb = ({ drill, onDrillTo }: Props) => {
             key="cluster-crumb"
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -8 }}
+            exit={{ opacity: 0, x: -8, transition: { duration: 0.12, ease: "easeIn" } }}
+            transition={{ type: "spring", stiffness: 380, damping: 30 }}
             className="flex items-start gap-1.5"
           >
             <span
@@ -96,7 +97,8 @@ export const Breadcrumb = ({ drill, onDrillTo }: Props) => {
             key="namespace-crumb"
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -8 }}
+            exit={{ opacity: 0, x: -8, transition: { duration: 0.12, ease: "easeIn" } }}
+            transition={{ type: "spring", stiffness: 380, damping: 30 }}
             className="flex items-start gap-1.5"
           >
             <span

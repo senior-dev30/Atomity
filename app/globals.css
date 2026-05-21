@@ -104,13 +104,13 @@ body {
 
   & tbody tr {
     border-block-start: 1px solid var(--color-border);
-    transition: background 0.12s;
+    transition: background 0.18s ease-out;
 
     & td {
       padding-block: 0.75rem;
       transition:
-        opacity 0.15s,
-        color 0.15s;
+        opacity 0.18s ease-out,
+        color 0.18s ease-out;
     }
 
     &:has(td:focus-visible) {
@@ -142,8 +142,8 @@ body {
   font-weight: 500;
   font-size: 0.875rem;
   transition:
-    color 0.15s,
-    background 0.15s;
+    color 0.18s ease-out,
+    background 0.18s ease-out;
 }
 
 .breadcrumb-segment--active {
@@ -178,12 +178,12 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    var(--color-bg-muted) 25%,
-    color-mix(in srgb, var(--color-bg-muted) 60%, var(--color-bg-secondary)) 50%,
-    var(--color-bg-muted) 75%
+    var(--color-bg-muted) 20%,
+    color-mix(in srgb, var(--color-bg-muted) 50%, var(--color-bg-secondary)) 50%,
+    var(--color-bg-muted) 80%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.4s ease-in-out infinite;
+  background-size: 300% 100%;
+  animation: shimmer 1.8s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   border-radius: var(--radius-md);
 }
 
