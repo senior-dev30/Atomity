@@ -68,6 +68,8 @@ const CostExplorer = () => {
               hovered={hovered}
               isLeaf={isLeaf}
               maxTotal={maxTot}
+              onHover={setHovered}
+              onSelect={drillDown}
             />
           </section>
           <section aria-label="Cost breakdown table" className="px-6 pb-6">
@@ -82,9 +84,12 @@ const CostExplorer = () => {
             />
           </section>
         </section>
-        <p className="text-center text-xs" style={{ color: "#6e6e73" }}>
-          bottom description
-        </p>
+
+        {!isLeaf && (
+          <p className="text-center text-xs" style={{ color: tokens.colors.textMuted }}>
+            Click any bar or row to drill down
+          </p>
+        )}
       </div>
     </main>
   );

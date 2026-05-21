@@ -10,9 +10,20 @@ interface Props {
   hovered: string | null;
   isLeaf: boolean;
   maxTotal: number;
+  onHover: (id: string | null) => void;
+  onSelect: (item: AnyNode) => void;
 }
 
-export const BarChart = ({ stateKey, items, hovRes, hovered, isLeaf, maxTotal }: Props) => {
+export const BarChart = ({
+  stateKey,
+  items,
+  hovRes,
+  hovered,
+  isLeaf,
+  maxTotal,
+  onHover,
+  onSelect,
+}: Props) => {
   const reduced = useReducedMotion();
 
   const wrapVariants = {
@@ -83,6 +94,22 @@ export const BarChart = ({ stateKey, items, hovRes, hovered, isLeaf, maxTotal }:
                       : ""
                   }`}
                   style={{ height: bh }}
+                  animate={{
+                    scale: isHov && !isLeaf ? 1.04 : 1,
+                    filter:
+                      isHov && !isLeaf
+                        ? "brightness(1.1) drop-shadow(0 6px 18px rgba(0,0,0,0.18))"
+                        : "brightness(1)",
+                  }}
+                  transition={
+                    reduced ? { duration: 0 } : { type: "spring", stiffness: 380, damping: 26 }
+                  }
+                  onClick={() => !isLeaf && onSelect(item)}
+                  onKeyDown={(e) =>
+                    !isLeaf && (e.key === "Enter" || e.key === " ") && onSelect(item)
+                  }
+                  onMouseEnter={() => onHover(item.id)}
+                  onMouseLeave={() => onHover(null)}
                 >
                   {RESOURCES.map((res) => {
                     const v = (item as unknown as ResourceMetrics)[res];
@@ -116,6 +143,13 @@ export const BarChart = ({ stateKey, items, hovRes, hovered, isLeaf, maxTotal }:
                     />
                   )}
                 </motion.div>
+
+                <div
+                  className="bar-label mt-2 text-center text-xs leading-tight font-medium"
+                  style={{ color: "var(--color-text-secondary)" }}
+                >
+                  {item.name}
+                </div>
               </motion.li>
             );
           })}
