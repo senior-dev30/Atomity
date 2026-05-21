@@ -4,6 +4,7 @@ import { useState } from "react";
 import { clusters as staticClusters } from "@/lib/data";
 import { DrillState, Resource } from "./types";
 import { RES, RESOURCES } from "@/utils/constants";
+import { tokens } from "@/lib/tokens";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -21,23 +22,23 @@ const CostExplorer = () => {
   const items = getItems(drill, clusters);
 
   return (
-    <main className="dashboard-wrap min-h-screen" style={{ background: "#f5f5f7" }}>
+    <main className="dashboard-wrap min-h-screen" style={{ background: tokens.colors.bgSecondary }}>
       <div className="mx-auto w-full max-w-4xl space-y-3">
         <section
           aria-label="Cost explorer"
           className="rounded-2xl shadow-lg"
-          style={{ background: "#ffffff" }}
+          style={{ background: tokens.colors.bgPrimary }}
         >
           <header
             className="flex flex-wrap items-start justify-between gap-4 px-6 py-4"
-            style={{ borderBottom: `1px solid #d1d1d6` }}
+            style={{ borderBottom: `1px solid ${tokens.colors.border}` }}
           >
             <div className="flex flex-wrap items-start gap-3">
               <div
                 className="rounded-lg px-4 py-1.5 text-sm font-medium"
                 style={{
-                  border: `1px solid #d1d1d6`,
-                  color: "#3c3c43",
+                  border: `1px solid ${tokens.colors.border}`,
+                  color: tokens.colors.textSecondary,
                 }}
               >
                 Last 30 Days
@@ -66,7 +67,7 @@ const CostExplorer = () => {
                     <th
                       scope="col"
                       className="py-3 text-right font-bold"
-                      style={{ color: "var(--color-text-primary)" }}
+                      style={{ color: tokens.colors.textPrimary }}
                     >
                       Total
                     </th>

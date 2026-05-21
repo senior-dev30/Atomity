@@ -1,0 +1,36 @@
+export const tokens = {
+  colors: {
+    bgPrimary: "var(--color-bg-primary)",
+    bgSecondary: "var(--color-bg-secondary)",
+    bgMuted: "var(--color-bg-muted)",
+    textPrimary: "var(--color-text-primary)",
+    textSecondary: "var(--color-text-secondary)",
+    textMuted: "var(--color-text-muted)",
+    accentPrimary: "var(--color-accent-primary)",
+    accentSuccess: "var(--color-accent-success)",
+    accentError: "var(--color-accent-error)",
+    accentWarning: "var(--color-accent-warning)",
+    accentLime: "var(--color-accent-lime)",
+    border: "var(--color-border)",
+  },
+  resources: {
+    cpu: "var(--color-resource-cpu)",
+    ram: "var(--color-resource-ram)",
+    storage: "var(--color-resource-storage)",
+    network: "var(--color-resource-network)",
+    gpu: "var(--color-resource-gpu)",
+  },
+  radius: {
+    sm: "var(--radius-sm)",
+    md: "var(--radius-md)",
+    lg: "var(--radius-lg)",
+    full: "var(--radius-full)",
+  },
+  spacing: {
+    xs: "var(--spacing-xs)",
+    sm: "var(--spacing-sm)",
+    md: "var(--spacing-md)",
+    lg: "var(--spacing-lg)",
+    xl: "var(--spacing-xl)",
+  },
+} as const;
