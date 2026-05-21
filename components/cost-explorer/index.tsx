@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { Cluster, Namespace, ResourceMetrics, clusters as staticClusters, total } from "@/lib/data";
-import { DrillState, Resource } from "./types";
+import { DrillState, Level, Resource } from "./types";
 import { tokens } from "@/lib/tokens";
 import { DataTable } from "./DataTable";
 import { BarChart } from "./BarChart";
@@ -10,6 +10,7 @@ import { effToken, fmt } from "@/utils/constants";
 import { ThemeToggle } from "./ThemeToggle";
 import { useClusterData } from "@/hooks/useClusterData";
 import { LoadingSkeleton } from "./LoadingSkeleton";
+import { Breadcrumb } from "./Breadcrumb";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -39,6 +40,14 @@ const CostExplorer = () => {
       if (drill.level === "cluster") setDrill({ level: "namespace", cluster: item as Cluster });
       else if (drill.level === "namespace")
         setDrill({ level: "pod", cluster: drill.cluster, namespace: item as Namespace });
+    },
+    [drill]
+  );
+
+  const drillTo = useCallback(
+    (level: Level) => {
+      if (level === "cluster") setDrill({ level: "cluster" });
+      else if (level === "namespace") setDrill({ level: "namespace", cluster: drill.cluster });
     },
     [drill]
   );
@@ -78,6 +87,7 @@ const CostExplorer = () => {
               >
                 Last 30 Days
               </div>
+              <Breadcrumb drill={drill} onDrillTo={drillTo} />
             </div>
             <div className="flex items-center gap-5">
               <dl className="flex items-center gap-5 text-sm">
