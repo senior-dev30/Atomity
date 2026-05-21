@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import { clusters as staticClusters } from "@/lib/data";
+import { useCallback, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Cluster, Namespace, ResourceMetrics, clusters as staticClusters, total } from "@/lib/data";
 import { DrillState, Resource } from "./types";
-import { RES, RESOURCES } from "@/utils/constants";
+import { effToken, fmt, RES, RESOURCES } from "@/utils/constants";
 import { tokens } from "@/lib/tokens";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
@@ -11,6 +12,8 @@ const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "namespace") return s.cluster!.namespaces;
   return s.namespace!.pods;
 };
+
+const stateKey = (s: DrillState) => s.level + (s.cluster?.id ?? "") + (s.namespace?.id ?? "");
 
 const CostExplorer = () => {
   const clusters = staticClusters;
@@ -20,6 +23,17 @@ const CostExplorer = () => {
   const [hovRes, setHovRes] = useState<Resource | null>(null);
 
   const items = getItems(drill, clusters);
+  const key = stateKey(drill);
+  const isLeaf = drill.level === "pod";
+
+  const drillDown = useCallback(
+    (item: any) => {
+      if (drill.level === "cluster") setDrill({ level: "namespace", cluster: item as Cluster });
+      else if (drill.level === "namespace")
+        setDrill({ level: "pod", cluster: drill.cluster, namespace: item as Namespace });
+    },
+    [drill]
+  );
 
   return (
     <main className="dashboard-wrap min-h-screen" style={{ background: tokens.colors.bgSecondary }}>
@@ -73,6 +87,79 @@ const CostExplorer = () => {
                     </th>
                   </tr>
                 </thead>
+                <AnimatePresence mode="wait">
+                  <motion.tbody
+                    key={key + "-tbody"}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.18 }}
+                  >
+                    {items.map((item, idx) => {
+                      const tot = total(item);
+                      const isHov = hovered === item.id;
+                      const color = effToken(item.efficiency);
+
+                      return (
+                        <motion.tr
+                          key={item.id}
+                          className="cursor-pointer"
+                          style={{ background: isHov ? "var(--color-bg-secondary)" : undefined }}
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: idx * 0.04 }}
+                          onMouseEnter={() => setHovered(item.id)}
+                          onMouseLeave={() => setHovered(null)}
+                          onClick={() => !isLeaf && drillDown(item)}
+                          onKeyDown={(e) =>
+                            !isLeaf && (e.key === "Enter" || e.key === " ") && drillDown(item)
+                          }
+                          tabIndex={isLeaf ? -1 : 0}
+                          aria-label={isLeaf ? undefined : `Drill into ${item.name}`}
+                        >
+                          <td
+                            className="py-3 pr-4 font-semibold"
+                            style={{ color: "var(--color-text-primary)" }}
+                          >
+                            {item.name}
+                          </td>
+
+                          {RESOURCES.map((res) => {
+                            const v = (item as unknown as ResourceMetrics)[res];
+                            return (
+                              <td
+                                key={res}
+                                className="py-3 pr-4 text-right tabular-nums"
+                                style={{
+                                  color:
+                                    hovRes === res ? RES[res].color : "var(--color-text-secondary)",
+                                  fontWeight: hovRes === res ? 600 : 400,
+                                  opacity: hovRes && hovRes !== res ? 0.25 : 1,
+                                }}
+                              >
+                                {fmt(v)}
+                              </td>
+                            );
+                          })}
+
+                          <td
+                            className="py-3 pr-4 text-right font-semibold tabular-nums"
+                            style={{ color }}
+                          >
+                            {item.efficiency}%
+                          </td>
+
+                          <td
+                            className="py-3 text-right font-bold tabular-nums"
+                            style={{ color: "var(--color-text-primary)" }}
+                          >
+                            {fmt(tot)}
+                          </td>
+                        </motion.tr>
+                      );
+                    })}
+                  </motion.tbody>
+                </AnimatePresence>
               </table>
             </div>
           </section>
