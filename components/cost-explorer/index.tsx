@@ -1,12 +1,11 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Cluster, Namespace, ResourceMetrics, clusters as staticClusters, total } from "@/lib/data";
 import { DrillState, Resource } from "./types";
-import { effToken, fmt, RES, RESOURCES } from "@/utils/constants";
 import { tokens } from "@/lib/tokens";
 import { DataTable } from "./DataTable";
+import { BarChart } from "./BarChart";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -60,6 +59,9 @@ const CostExplorer = () => {
               </div>
             </div>
           </header>
+          <section aria-label="Cost chart" className="px-6 pt-4 pb-2">
+            <BarChart />
+          </section>
           <section aria-label="Cost breakdown table" className="px-6 pb-6">
             <DataTable
               items={items}

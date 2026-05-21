@@ -20,3 +20,5 @@ export const effToken = (e: number): string => {
   if (e < 60) return tokens.colors.accentLime;
   return tokens.colors.accentSuccess;
 };
+
+export const BAR_MAX_H = 200; // px
