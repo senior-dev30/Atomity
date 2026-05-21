@@ -6,6 +6,8 @@ import { DrillState, Resource } from "./types";
 import { tokens } from "@/lib/tokens";
 import { DataTable } from "./DataTable";
 import { BarChart } from "./BarChart";
+import { effToken, fmt } from "@/utils/constants";
+import { ThemeToggle } from "./ThemeToggle";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -24,6 +26,8 @@ const CostExplorer = () => {
 
   const items = getItems(drill, clusters);
   const maxTot = Math.max(...items.map(total));
+  const totalSpend = items.reduce((s, i) => s + total(i), 0);
+  const avgEff = Math.round(items.reduce((s, i) => s + i.efficiency, 0) / items.length);
   const key = stateKey(drill);
   const isLeaf = drill.level === "pod";
 
@@ -58,6 +62,39 @@ const CostExplorer = () => {
               >
                 Last 30 Days
               </div>
+            </div>
+            <div className="flex items-center gap-5">
+              <dl className="flex items-center gap-5 text-sm">
+                <div className="text-right">
+                  <dt
+                    className="text-xs tracking-wide uppercase"
+                    style={{ color: tokens.colors.textMuted }}
+                  >
+                    Total
+                  </dt>
+                  <dd
+                    className="font-bold tabular-nums"
+                    style={{ color: tokens.colors.textPrimary }}
+                  >
+                    {fmt(totalSpend)}
+                  </dd>
+                </div>
+                <div className="text-right">
+                  <dt
+                    className="text-xs tracking-wide uppercase"
+                    style={{ color: tokens.colors.textMuted }}
+                  >
+                    Avg Efficiency
+                  </dt>
+                  <dd
+                    className="text-lg leading-tight font-bold tabular-nums"
+                    style={{ color: effToken(avgEff) }}
+                  >
+                    {avgEff}%
+                  </dd>
+                </div>
+              </dl>
+              <ThemeToggle />
             </div>
           </header>
           <section aria-label="Cost chart" className="px-6 pt-4 pb-2">
