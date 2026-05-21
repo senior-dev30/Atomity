@@ -1,8 +1,8 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { tokens } from "@/lib/tokens";
 import { fmt } from "@/utils/constants";
+import { tokens } from "@/lib/tokens";
 
 interface Props {
   savings: number;
@@ -22,12 +22,12 @@ export const SavingsBanner = ({ savings, stateKey }: Props) => {
         transition={{ duration: 0.25 }}
         className="flex items-center justify-between rounded-xl border px-5 py-3"
         style={{
-          background: `color-mix(in srgb, ${tokens.colors.accentWarning} 8%, ${tokens.colors.bgPrimary})`,
-          borderColor: `color-mix(in srgb, ${tokens.colors.accentWarning} 30%, transparent)`,
+          background: `color-mix(in srgb, ${tokens.colors.accentSuccess} 8%, ${tokens.colors.bgPrimary})`,
+          borderColor: `color-mix(in srgb, ${tokens.colors.accentSuccess} 25%, transparent)`,
         }}
       >
-        <span className="text-sm font-medium" style={{ color: tokens.colors.accentWarning }}>
-          ⚡ Optimization opportunity detected
+        <span className="text-sm font-medium" style={{ color: tokens.colors.accentSuccess }}>
+          ✦ Optimization opportunity detected
         </span>
         <span
           className="text-sm font-bold tabular-nums"
@@ -38,4 +38,4 @@ export const SavingsBanner = ({ savings, stateKey }: Props) => {
       </motion.aside>
     </AnimatePresence>
   );
-};
+}

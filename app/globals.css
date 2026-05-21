@@ -33,15 +33,35 @@
   --spacing-xl: 40px;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg-primary: #0e0f11;
+    --color-bg-secondary: #1c1c1e;
+    --color-bg-muted: #2c2c2e;
+    --color-text-primary: #f5f5f7;
+    --color-text-secondary: #aeaeb2;
+    --color-text-muted: #6e6e73;
+    --color-border: #38383a;
+  }
+}
+
+[data-theme="dark"] {
+  --color-bg-primary: #0e0f11;
+  --color-bg-secondary: #1c1c1e;
+  --color-bg-muted: #2c2c2e;
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #aeaeb2;
+  --color-text-muted: #6e6e73;
+  --color-border: #38383a;
+}
+
 body {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ─── fluid layout ──────────────────────────────────────────────────────────── */
 .dashboard-wrap {
-  /* clamp() for fluid padding: 1rem on mobile → 2.5rem on desktop */
   padding: clamp(1rem, 4vw, 2.5rem);
   padding-block-start: clamp(1.5rem, 5vw, 3rem);
 }
@@ -49,6 +69,25 @@ body {
 .chart-container {
   container-type: inline-size;
   container-name: chart;
+}
+
+@container chart (max-width: 480px) {
+  .eff-badge {
+    display: none;
+  }
+  .bar-label {
+    font-size: 10px;
+  }
+  .res-legend {
+    gap: 0.5rem;
+    font-size: 10px;
+  }
+}
+
+@container chart (max-width: 320px) {
+  .bar-label {
+    display: none;
+  }
 }
 
 .cost-table {
@@ -74,7 +113,6 @@ body {
         color 0.15s;
     }
 
-    /* :has() — highlight row when any cell is focused */
     &:has(td:focus-visible) {
       outline: 2px solid var(--color-accent-primary);
       outline-offset: -2px;
@@ -86,17 +124,46 @@ body {
 .eff-badge {
   display: inline-flex;
   align-items: center;
-  /* color-mix() blends the token color into a readable tinted background */
   background: color-mix(in srgb, var(--eff-color, #22c55e) 14%, var(--color-bg-primary));
   color: var(--eff-color, #22c55e);
   border: 1px solid color-mix(in srgb, var(--eff-color, #22c55e) 28%, transparent);
   border-radius: var(--radius-full);
-  /* Logical properties for padding */
   padding-inline: 0.5rem;
   padding-block: 0.125rem;
   font-size: 0.6875rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.breadcrumb-segment {
+  padding-inline: 0.75rem;
+  padding-block: 0.375rem;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.breadcrumb-segment--active {
+  background: color-mix(in srgb, var(--color-accent-success) 12%, var(--color-bg-primary));
+  color: var(--color-accent-success);
+  cursor: default;
+}
+
+.breadcrumb-segment--link {
+  color: var(--color-text-muted);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-accent-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
 }
 
 @keyframes shimmer {
@@ -132,36 +199,5 @@ body {
   .skeleton {
     animation: none;
     background: var(--color-bg-muted);
-  }
-}
-
-.breadcrumb-segment {
-  padding-inline: 0.75rem;
-  padding-block: 0.375rem;
-  border-radius: var(--radius-md);
-  font-weight: 500;
-  font-size: 0.875rem;
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-
-.breadcrumb-segment--active {
-  background: color-mix(in srgb, var(--color-accent-success) 12%, var(--color-bg-primary));
-  color: var(--color-accent-success);
-  cursor: default;
-}
-
-.breadcrumb-segment--link {
-  color: var(--color-text-muted);
-  cursor: pointer;
-
-  &:hover {
-    color: var(--color-accent-primary);
-  }
-
-  &:focus-visible {
-    outline: 2px solid var(--color-accent-primary);
-    outline-offset: 2px;
   }
 }
