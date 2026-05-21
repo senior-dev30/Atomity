@@ -11,6 +11,8 @@ import { ThemeToggle } from "./ThemeToggle";
 import { useClusterData } from "@/hooks/useClusterData";
 import { LoadingSkeleton } from "./LoadingSkeleton";
 import { Breadcrumb } from "./Breadcrumb";
+import { SavingsBanner } from "./SavingsBanner";
+import { ResourceLegend } from "./ResourceLegend";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -32,6 +34,7 @@ const CostExplorer = () => {
   const maxTot = Math.max(...items.map(total));
   const totalSpend = items.reduce((s, i) => s + total(i), 0);
   const avgEff = Math.round(items.reduce((s, i) => s + i.efficiency, 0) / items.length);
+  const savings = Math.round(items.reduce((s, i) => s + total(i) * (1 - i.efficiency / 100), 0));
   const key = stateKey(drill);
   const isLeaf = drill.level === "pod";
 
@@ -68,6 +71,8 @@ const CostExplorer = () => {
   return (
     <main className="dashboard-wrap min-h-screen" style={{ background: tokens.colors.bgSecondary }}>
       <div className="mx-auto w-full max-w-4xl space-y-3">
+        <SavingsBanner savings={savings} stateKey={key} />
+
         <section
           aria-label="Cost explorer"
           className="rounded-2xl shadow-lg"
@@ -123,7 +128,9 @@ const CostExplorer = () => {
               <ThemeToggle />
             </div>
           </header>
+
           <section aria-label="Cost chart" className="px-6 pt-4 pb-2">
+            <ResourceLegend hovRes={hovRes} onHovRes={setHovRes} />
             <BarChart
               stateKey={key}
               items={items}
@@ -135,6 +142,7 @@ const CostExplorer = () => {
               onSelect={drillDown}
             />
           </section>
+
           <section aria-label="Cost breakdown table" className="px-6 pb-6">
             <DataTable
               items={items}
@@ -150,7 +158,13 @@ const CostExplorer = () => {
 
         {!isLeaf && (
           <p className="text-center text-xs" style={{ color: tokens.colors.textMuted }}>
-            Click any bar or row to drill down
+            Click any bar or row to drill down · click breadcrumb to navigate up
+          </p>
+        )}
+
+        {isError && (
+          <p className="text-center text-xs" style={{ color: tokens.colors.textMuted }}>
+            Showing demo data — live API unavailable
           </p>
         )}
       </div>
