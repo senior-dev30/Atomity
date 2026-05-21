@@ -9,6 +9,7 @@ import { BarChart } from "./BarChart";
 import { effToken, fmt } from "@/utils/constants";
 import { ThemeToggle } from "./ThemeToggle";
 import { useClusterData } from "@/hooks/useClusterData";
+import { LoadingSkeleton } from "./LoadingSkeleton";
 
 const getItems = (s: DrillState, clusterList: any[]): any[] => {
   if (s.level === "cluster") return clusterList;
@@ -41,6 +42,19 @@ const CostExplorer = () => {
     },
     [drill]
   );
+
+  if (isLoading) {
+    return (
+      <main
+        className="dashboard-wrap min-h-screen"
+        style={{ background: tokens.colors.bgSecondary }}
+      >
+        <div className="mx-auto w-full max-w-4xl">
+          <LoadingSkeleton />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="dashboard-wrap min-h-screen" style={{ background: tokens.colors.bgSecondary }}>
