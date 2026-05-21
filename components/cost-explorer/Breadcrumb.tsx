@@ -26,7 +26,7 @@ const ActivePill = ({ label, level }: { label: string; level: Level }) => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
-          className="rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-sm"
+          className="hidden sm:block rounded-lg px-3 py-2 text-xs whitespace-nowrap shadow-sm"
           style={{
             background: "var(--color-bg-primary)",
             border: "1px solid var(--color-border)",
